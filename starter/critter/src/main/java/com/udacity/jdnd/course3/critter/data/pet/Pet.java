@@ -1,6 +1,6 @@
-package com.udacity.jdnd.course3.critter.pet;
+package com.udacity.jdnd.course3.critter.data.pet;
 
-import com.udacity.jdnd.course3.critter.user.Employee;
+import com.udacity.jdnd.course3.critter.data.user.Employee;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,9 +10,8 @@ import java.util.List;
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long idLong;
+    private Long id;
 
-    private long id;
     private PetType type;
     private String name;
     private long ownerId;
@@ -29,8 +28,7 @@ public class Pet {
     // No argument constructor
     public Pet() {}
 
-    public Pet(Long idLong,
-               long id,
+    public Pet(Long id,
                PetType type,
                String name,
                long ownerId,
@@ -38,7 +36,7 @@ public class Pet {
                String notes,
                List<Employee> employees)
     {
-        this.idLong = idLong;
+        this.id = id;
         this.id = id;
         this.type = type;
         this.name = name;
@@ -50,19 +48,11 @@ public class Pet {
 
     // Getters & Setters
 
-    public Long getIdLong() {
-        return idLong;
-    }
-
-    public void setIdLong(Long idLong) {
-        this.idLong = idLong;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

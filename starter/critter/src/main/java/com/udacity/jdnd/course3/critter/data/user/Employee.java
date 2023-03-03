@@ -1,14 +1,17 @@
-package com.udacity.jdnd.course3.critter.user;
+package com.udacity.jdnd.course3.critter.data.user;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.DayOfWeek;
 import java.util.Set;
 
-/**
- * Represents the form that employee request and response data takes. Does not map
- * to the database directly.
- */
-public class EmployeeDTO {
+@Entity
+public class Employee {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long idLong;
 
     private long id;
     private String name;
@@ -16,8 +19,25 @@ public class EmployeeDTO {
     private Set<DayOfWeek> daysAvailable;
 
 
+    // No argument constructor
+    public Employee(){}
 
-    // Getters & Setters
+    public Employee(Long idLong, long id, String name, Set<EmployeeSkill> skills, Set<DayOfWeek> daysAvailable) {
+        this.idLong = idLong;
+        this.id = id;
+        this.name = name;
+        this.skills = skills;
+        this.daysAvailable = daysAvailable;
+    }
+
+    public Long getIdLong() {
+        return idLong;
+    }
+
+    public void setIdLong(Long idLong) {
+        this.idLong = idLong;
+    }
+
     public long getId() {
         return id;
     }

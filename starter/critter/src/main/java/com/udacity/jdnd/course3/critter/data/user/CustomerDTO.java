@@ -1,4 +1,4 @@
-package com.udacity.jdnd.course3.critter.user;
+package com.udacity.jdnd.course3.critter.data.user;
 
 import javax.persistence.*;
 import java.util.List;

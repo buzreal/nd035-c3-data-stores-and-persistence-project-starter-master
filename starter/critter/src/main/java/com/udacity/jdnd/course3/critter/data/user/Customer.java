@@ -1,6 +1,4 @@
-package com.udacity.jdnd.course3.critter.user;
-
-import com.udacity.jdnd.course3.critter.pet.Pet;
+package com.udacity.jdnd.course3.critter.data.user;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,17 +18,15 @@ public class Customer {
     private String notes;
     private List<Long> petIds;
 
-    // No argument constructor
-    public Customer(){}
 
-    public Customer(Long idLong,
-                    long id,
+    public Customer(
+                    Long id,
                     String name,
                     String phoneNumber,
                     String notes,
-                    List<Long> petIds)
+                    List<Long> petIds
+                    )
     {
-        this.idLong = idLong;
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
@@ -38,19 +34,15 @@ public class Customer {
         this.petIds = petIds;
     }
 
-    public Long getIdLong() {
+    // No argument constructor
+    public Customer(){}
+
+
+    public Long getId() {
         return idLong;
     }
 
-    public void setIdLong(Long idLong) {
-        this.idLong = idLong;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
