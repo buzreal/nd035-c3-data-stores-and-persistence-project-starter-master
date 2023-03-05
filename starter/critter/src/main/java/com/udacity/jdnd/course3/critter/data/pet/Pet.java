@@ -21,8 +21,7 @@ public class Pet {
     @JoinTable(
             name = "pet_employee",
             joinColumns = { @JoinColumn(name = "pet_id")},
-            inverseJoinColumns = { @JoinColumn(name = "employee_id")}
-    )
+            inverseJoinColumns = { @JoinColumn(name = "employee_id")})
     List<Employee> employees;
 
     // No argument constructor
