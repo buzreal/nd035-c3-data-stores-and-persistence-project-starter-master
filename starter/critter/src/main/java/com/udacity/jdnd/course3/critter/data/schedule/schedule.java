@@ -6,12 +6,12 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
-@Entity
+
 public class schedule {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    //@Column(name = "id", nullable = false)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    //@Column(name = "id", nullable = false)
+//    private Long id;
 
     private List<Long> petIds;
     private LocalDate date;
@@ -53,11 +53,11 @@ public class schedule {
         this.activities = activities;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
 }

@@ -36,7 +36,6 @@ public class Pet {
                List<Employee> employees)
     {
         this.id = id;
-        this.id = id;
         this.type = type;
         this.name = name;
         this.ownerId = ownerId;
