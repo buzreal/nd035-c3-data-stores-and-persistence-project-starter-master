@@ -1,5 +1,7 @@
 package com.udacity.jdnd.course3.critter.data.pet;
 
+import com.udacity.jdnd.course3.critter.data.schedule.Schedule;
+import com.udacity.jdnd.course3.critter.data.user.Customer;
 import com.udacity.jdnd.course3.critter.data.user.Employee;
 
 import javax.persistence.*;
@@ -23,6 +25,13 @@ public class Pet {
             joinColumns = { @JoinColumn(name = "pet_id")},
             inverseJoinColumns = { @JoinColumn(name = "employee_id")})
     List<Employee> employees;
+    @ManyToMany(mappedBy = "pets")
+    List<Schedule> schedules;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ownerId", insertable = false, updatable = false)
+    private Customer owner;
 
     // No argument constructor
     public Pet() {}
@@ -33,7 +42,9 @@ public class Pet {
                long ownerId,
                LocalDate birthDate,
                String notes,
-               List<Employee> employees)
+               List<Employee> employees,
+               List<Schedule> schedules,
+               Customer owner)
     {
         this.id = id;
         this.type = type;
@@ -42,6 +53,8 @@ public class Pet {
         this.birthDate = birthDate;
         this.notes = notes;
         this.employees = employees;
+        this.schedules = schedules;
+        this.owner = owner;
     }
 
     // Getters & Setters
@@ -100,5 +113,21 @@ public class Pet {
 
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
+    }
+
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
+    }
+
+    public Customer getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Customer owner) {
+        this.owner = owner;
     }
 }

@@ -1,9 +1,8 @@
 package com.udacity.jdnd.course3.critter.data.user;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.udacity.jdnd.course3.critter.data.pet.Pet;
+
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -15,15 +14,18 @@ public class Customer {
     private String name;
     private String phoneNumber;
     private String notes;
+    @ElementCollection
     private List<Long> petIds;
-
+    @OneToMany(mappedBy = "owner")
+    private List<Pet> pets;
 
     public Customer(
                     Long id,
                     String name,
                     String phoneNumber,
                     String notes,
-                    List<Long> petIds
+                    List<Long> petIds,
+                    List<Pet> pets
                     )
     {
         this.id = id;
@@ -31,6 +33,7 @@ public class Customer {
         this.phoneNumber = phoneNumber;
         this.notes = notes;
         this.petIds = petIds;
+        this.pets = pets;
     }
 
     // No argument constructor
@@ -75,5 +78,13 @@ public class Customer {
 
     public void setPetIds(List<Long> petIds) {
         this.petIds = petIds;
+    }
+
+    public List<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(List<Pet> pets) {
+        this.pets = pets;
     }
 }

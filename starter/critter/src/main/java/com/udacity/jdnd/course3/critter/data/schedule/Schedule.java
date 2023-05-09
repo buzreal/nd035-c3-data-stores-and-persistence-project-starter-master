@@ -1,5 +1,6 @@
 package com.udacity.jdnd.course3.critter.data.schedule;
 
+import com.udacity.jdnd.course3.critter.data.pet.Pet;
 import com.udacity.jdnd.course3.critter.data.user.EmployeeSkill;
 
 import javax.persistence.*;
@@ -7,19 +8,24 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-public class schedule {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    //@Column(name = "id", nullable = false)
-//    private Long id;
-
+@Entity
+public class Schedule {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@Column(name = "id", nullable = false)
+    private Long id;
+    @ElementCollection
+    private List<Long> employeeIds;
+    @ElementCollection
     private List<Long> petIds;
     private LocalDate date;
+    @ElementCollection
     private Set<EmployeeSkill> activities;
 
+    @ManyToMany
+    private List<Pet> pets;
 
 
-    private List<Long> employeeIds;
 
     public List<Long> getEmployeeIds() {
         return employeeIds;
@@ -53,11 +59,19 @@ public class schedule {
         this.activities = activities;
     }
 
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(List<Pet> pets) {
+        this.pets = pets;
+    }
 }

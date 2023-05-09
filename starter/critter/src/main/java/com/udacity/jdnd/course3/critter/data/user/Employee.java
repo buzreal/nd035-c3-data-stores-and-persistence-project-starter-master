@@ -1,10 +1,10 @@
 package com.udacity.jdnd.course3.critter.data.user;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.udacity.jdnd.course3.critter.data.pet.Pet;
+
+import javax.persistence.*;
 import java.time.DayOfWeek;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,9 +14,13 @@ public class Employee {
     private Long id;
 
     private String name;
+    @ElementCollection
     private Set<EmployeeSkill> skills;
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
     private Set<DayOfWeek> daysAvailable;
-
+    @ManyToMany(mappedBy = "employees")
+    private List<Pet> pets;
 
     // No argument constructor
     public Employee(){}
