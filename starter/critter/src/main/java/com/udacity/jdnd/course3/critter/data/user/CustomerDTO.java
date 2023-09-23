@@ -57,4 +57,5 @@ public class CustomerDTO {
     public void setPetIds(List<Long> petIds) {
         this.petIds = petIds;
     }
+
 }

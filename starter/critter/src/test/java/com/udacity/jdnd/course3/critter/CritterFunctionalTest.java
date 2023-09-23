@@ -2,16 +2,19 @@ package com.udacity.jdnd.course3.critter;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.udacity.jdnd.course3.critter.data.pet.PetController;
+import com.udacity.jdnd.course3.critter.controller.PetController;
+import com.udacity.jdnd.course3.critter.controller.ScheduleController;
+import com.udacity.jdnd.course3.critter.controller.UserController;
 import com.udacity.jdnd.course3.critter.data.pet.PetDTO;
 import com.udacity.jdnd.course3.critter.data.pet.PetType;
-import com.udacity.jdnd.course3.critter.data.schedule.ScheduleController;
 import com.udacity.jdnd.course3.critter.data.schedule.ScheduleDTO;
 import com.udacity.jdnd.course3.critter.data.user.*;
+import javassist.NotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
@@ -36,6 +39,7 @@ public class CritterFunctionalTest {
     @Autowired
     private UserController userController;
 
+
     @Autowired
     private PetController petController;
 
@@ -53,17 +57,17 @@ public class CritterFunctionalTest {
     }
 
     @Test
-    public void testCreateEmployee(){
+    public void testCreateEmployee() throws NotFoundException {
         EmployeeDTO employeeDTO = createEmployeeDTO();
         EmployeeDTO newEmployee = userController.saveEmployee(employeeDTO);
-        EmployeeDTO retrievedEmployee = userController.getEmployee(newEmployee.getId());
+        Employee retrievedEmployee = userController.getEmployee(newEmployee.getId());
         Assertions.assertEquals(employeeDTO.getSkills(), newEmployee.getSkills());
         Assertions.assertEquals(newEmployee.getId(), retrievedEmployee.getId());
         Assertions.assertTrue(retrievedEmployee.getId() > 0);
     }
 
     @Test
-    public void testAddPetsToCustomer() {
+    public void testAddPetsToCustomer() throws NotFoundException {
         CustomerDTO customerDTO = createCustomerDTO();
         CustomerDTO newCustomer = userController.saveCustomer(customerDTO);
 
@@ -92,6 +96,7 @@ public class CritterFunctionalTest {
         CustomerDTO customerDTO = createCustomerDTO();
         CustomerDTO newCustomer = userController.saveCustomer(customerDTO);
 
+
         PetDTO petDTO = createPetDTO();
         petDTO.setOwnerId(newCustomer.getId());
         PetDTO newPet = petController.savePet(petDTO);
@@ -99,11 +104,14 @@ public class CritterFunctionalTest {
         petDTO.setName("DogName");
         PetDTO newPet2 = petController.savePet(petDTO);
 
+
         List<PetDTO> pets = petController.getPetsByOwner(newCustomer.getId());
         Assertions.assertEquals(pets.size(), 2);
         Assertions.assertEquals(pets.get(0).getOwnerId(), newCustomer.getId());
         Assertions.assertEquals(pets.get(0).getId(), newPet.getId());
     }
+
+
 
     @Test
     public void testFindOwnerByPet() {
@@ -120,7 +128,7 @@ public class CritterFunctionalTest {
     }
 
     @Test
-    public void testChangeEmployeeAvailability() {
+    public void testChangeEmployeeAvailability() throws NotFoundException {
         EmployeeDTO employeeDTO = createEmployeeDTO();
         EmployeeDTO emp1 = userController.saveEmployee(employeeDTO);
         Assertions.assertNull(emp1.getDaysAvailable());
@@ -128,7 +136,7 @@ public class CritterFunctionalTest {
         Set<DayOfWeek> availability = Sets.newHashSet(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY);
         userController.setAvailability(availability, emp1.getId());
 
-        EmployeeDTO emp2 = userController.getEmployee(emp1.getId());
+        Employee emp2 = userController.getEmployee(emp1.getId());
         Assertions.assertEquals(availability, emp2.getDaysAvailable());
     }
 

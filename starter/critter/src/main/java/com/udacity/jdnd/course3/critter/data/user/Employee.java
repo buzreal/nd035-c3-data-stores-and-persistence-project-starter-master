@@ -4,6 +4,7 @@ import com.udacity.jdnd.course3.critter.data.pet.Pet;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -17,8 +18,10 @@ public class Employee {
     @ElementCollection
     private Set<EmployeeSkill> skills;
     @ElementCollection
+    @CollectionTable(name = "daysAvailable", joinColumns = @JoinColumn(name = "employee_id"))
+    @Column(name = "day")
     @Enumerated(EnumType.STRING)
-    private Set<DayOfWeek> daysAvailable;
+    private Set<DayOfWeek> daysAvailable = new HashSet<>();
     @ManyToMany(mappedBy = "employees")
     private List<Pet> pets;
 
@@ -31,6 +34,9 @@ public class Employee {
         this.skills = skills;
         this.daysAvailable = daysAvailable;
     }
+
+
+
 
     public Long getId() {
         return id;

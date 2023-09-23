@@ -1,5 +1,6 @@
 package com.udacity.jdnd.course3.critter.data.user;
 
+import javax.persistence.Entity;
 import java.time.LocalDate;
 import java.util.Set;
 public class EmployeeRequest {
