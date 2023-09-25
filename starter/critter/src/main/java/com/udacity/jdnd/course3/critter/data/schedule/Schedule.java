@@ -1,6 +1,7 @@
 package com.udacity.jdnd.course3.critter.data.schedule;
 
 import com.udacity.jdnd.course3.critter.data.pet.Pet;
+import com.udacity.jdnd.course3.critter.data.user.Employee;
 import com.udacity.jdnd.course3.critter.data.user.EmployeeSkill;
 
 import javax.persistence.*;
@@ -25,6 +26,16 @@ public class Schedule {
     @ManyToMany
     private List<Pet> pets;
 
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    @ManyToOne
+    private Employee employee;
 
 
     public List<Long> getEmployeeIds() {
