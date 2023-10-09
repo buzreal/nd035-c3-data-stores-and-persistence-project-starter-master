@@ -11,11 +11,14 @@ import java.util.List;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    List<Schedule> findByStartTimeBetween(Date start, Date end);
 
     List<Schedule> findByEmployee(Employee id);
 
-    List<Schedule> findByPet(Pet pet);
+
+    List<Schedule> findByPetId(Long petId);
 
     List<Schedule> findByCustomer(Customer customer);
+
+    List<Schedule> findByEmployeeIdOrPetIdOrCustomerId(Long employeeId, Long petId, Long customerId);
+
 }

@@ -1,9 +1,10 @@
 package com.udacity.jdnd.course3.critter.data.user;
 
-import com.udacity.jdnd.course3.critter.data.pet.Pet;
+import com.udacity.jdnd.course3.critter.data.schedule.Schedule;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,13 +18,14 @@ public class Employee {
     private String name;
     @ElementCollection
     private Set<EmployeeSkill> skills;
-    @ElementCollection
-    @CollectionTable(name = "daysAvailable", joinColumns = @JoinColumn(name = "employee_id"))
-    @Column(name = "day")
-    @Enumerated(EnumType.STRING)
-    private Set<DayOfWeek> daysAvailable = new HashSet<>();
-    @ManyToMany(mappedBy = "employees")
-    private List<Pet> pets;
+
+    @ElementCollection(targetClass = DayOfWeek.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "employee_days_available", joinColumns = @JoinColumn(name = "employee_id"))
+    @Column(name = "day_available")
+    private Set<DayOfWeek> daysAvailable = new HashSet<>(Arrays.asList(DayOfWeek.values()));
+
+    @OneToMany(mappedBy = "employee")
+    private List<Schedule> schedules;
 
     // No argument constructor
     public Employee(){}

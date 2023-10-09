@@ -4,6 +4,7 @@ import com.udacity.jdnd.course3.critter.data.pet.Pet;
 import com.udacity.jdnd.course3.critter.data.pet.PetDTO;
 import com.udacity.jdnd.course3.critter.data.pet.PetRepository;
 import com.udacity.jdnd.course3.critter.data.user.Customer;
+import com.udacity.jdnd.course3.critter.data.user.CustomerRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +17,17 @@ import java.util.Optional;
 public class PetService {
     @Autowired
     private  PetRepository petRepository;
+    @Autowired
+    private CustomerService customerService;
+    @Autowired
+    CustomerRepository customerRepository;
 
     public List<PetDTO> getAllPets() {
         List<Pet> pets = petRepository.findAll();
         return mapPetsToDTOs(pets);
     }
+
+
 
 
     public Pet getPetById(Long id) throws NotFoundException {
@@ -34,11 +41,11 @@ public class PetService {
         petDTO.setName(pet.getName());
         petDTO.setType(pet.getType());
         petDTO.setBirthDate(pet.getBirthDate());
-        petDTO.setOwnerId(pet.getOwnerId());
         pet = petRepository.save(pet);
 
         return mapPetToDTO(pet);
     }
+
 
     public PetDTO getPet(Long petId) throws NotFoundException {
         Optional<Pet> petOptional = petRepository.findById(petId);
@@ -57,6 +64,24 @@ public class PetService {
         petRepository.deleteById(id);
     }
 
+
+    public void addPetsToOwner(Long ownerId, PetDTO petDTO) {
+        Customer customer = customerRepository.getOne(ownerId);
+
+        // Create a new pet entity and set its properties from the DTO
+        Pet pet = new Pet();
+        pet.setOwner(customer);
+        pet.setName(petDTO.getName());
+        // Save the pet entity
+        Pet savedPet = petRepository.save(pet);
+
+        // Add the pet's ID to the customer's petIds set
+        customer.getPetIds().add(savedPet.getId());
+        // Update the customer in the repository
+        customerRepository.save(customer);
+    }
+
+
     public List<PetDTO> getPetsByOwner(Long ownerId) {
         Customer owner = new Customer();
         owner.setId(ownerId);
@@ -70,7 +95,6 @@ public class PetService {
         petDTO.setName(pet.getName());
         petDTO.setType(pet.getType());
         petDTO.setBirthDate(pet.getBirthDate());
-        petDTO.setOwnerId(pet.getOwnerId());
         return petDTO;
     }
 
@@ -82,7 +106,6 @@ public class PetService {
             petDTO.setName(pet.getName());
             petDTO.setType(pet.getType());
             petDTO.setBirthDate(pet.getBirthDate());
-            petDTO.setOwnerId(pet.getOwnerId());
             // Map other attributes as needed
             petDTOs.add(petDTO);
         }

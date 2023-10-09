@@ -1,6 +1,6 @@
 package com.udacity.jdnd.course3.critter.data.user;
 
-import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,7 +14,10 @@ public class CustomerDTO {
     private String name;
     private String phoneNumber;
     private String notes;
-    private List<Long> petIds;
+
+
+
+    private List<Long> petIds = new ArrayList<>();
 
 
     //Getters & Setters
@@ -54,7 +57,7 @@ public class CustomerDTO {
         return petIds;
     }
 
-    public void setPetIds(List<Long> petIds) {
+    public void setPetIds(List petIds) {
         this.petIds = petIds;
     }
 

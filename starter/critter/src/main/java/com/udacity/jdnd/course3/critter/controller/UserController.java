@@ -32,26 +32,18 @@ public class UserController {
     @Autowired
     private EmployeeService employeeService;
 
-    @Autowired
-    public UserController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
-
-    public UserController(CustomerService customerService) {
-        this.customerService = customerService;
-    }
 
     @GetMapping("/customer")
     public List<CustomerDTO> getAllCustomers() {
-        // Assuming your service can retrieve and return a list of CustomerDTOs
         List<CustomerDTO> customerDTOs = customerService.getAllCustomerDTOs();
         return customerDTOs;
     }
 
     @GetMapping("/customer/pet/{petId}")
-    public CustomerDTO getOwnerByPet(@PathVariable long petId){
-        throw new UnsupportedOperationException();
+    public CustomerDTO getOwnerByPet(@PathVariable Long petId) throws NotFoundException {
+        return customerService.getOwnerByPet(petId);
     }
+
 
     @GetMapping("/{customerId}")
     public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Long id) throws NotFoundException {
@@ -59,9 +51,6 @@ public class UserController {
         CustomerDTO customerDTO = mapCustomerToDTO(customer);
         return ResponseEntity.ok(customerDTO);
     }
-
-
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
@@ -81,35 +70,10 @@ public class UserController {
         return customerDTO;
     }
 
-    private Customer mapDTOToCustomer(CustomerDTO customerDTO) {
-        Customer customer = new Customer();
-        customer.setId(customer.getId());
-        customer.setName(customer.getName());
-        customer.setPhoneNumber(customer.getPhoneNumber());
-        customer.setNotes(customer.getNotes());
-        customer.setPetIds(customer.getPetIds());
-        return customer;
-    }
-
-//    @PostMapping("/customer")
-//    public CustomerDTO createCustomer(@RequestBody CustomerDTO customerDTO){
-//        throw new UnsupportedOperationException();
-//
-//    }
-//
-//    @GetMapping("/customers")
-//    public List<CustomerDTO> getAllCustomers(){
-//        throw new UnsupportedOperationException();
-//    }
-//
-//    @GetMapping("/customer/pet/{petId}")
-//    public CustomerDTO getOwnerByPet(@PathVariable long petId){
-//        throw new UnsupportedOperationException();
-//    }
 
     @PostMapping("/employee")
     public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        throw new UnsupportedOperationException();
+        return employeeService.saveEmployee(employeeDTO);
     }
 
     @PostMapping("/employee/{employeeId}")
@@ -126,15 +90,17 @@ public class UserController {
 
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@PathVariable EmployeeRequestDTO dayOfWeek) {
-        return employeeService.findEmployeeForService(dayOfWeek);
+        return employeeService.findEmployeesForService(dayOfWeek);
     }
-//    public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-//        throw new UnsupportedOperationException();
-//    }
 
     @PostMapping
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO) {
         CustomerDTO newCustomer = customerService.saveCustomer(customerDTO);
         return newCustomer;
+    }
+
+    @GetMapping("/{id}")
+    public CustomerDTO getCustomer(@PathVariable Long id) {
+        return customerService.getCustomerByOwnerId(id);
     }
 }

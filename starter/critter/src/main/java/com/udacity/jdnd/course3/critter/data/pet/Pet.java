@@ -16,7 +16,8 @@ public class Pet {
 
     private PetType type;
     private String name;
-    private long ownerId;
+    @Column(name = "ownerId") // Define the column name
+    private Long ownerId;
     private LocalDate birthDate;
     private String notes;
     @ManyToMany
@@ -29,17 +30,20 @@ public class Pet {
     List<Schedule> schedules;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ownerId", insertable = false, updatable = false)
+    @ManyToOne
+    @JoinColumn(name = "ownerId", referencedColumnName = "id", insertable = false, updatable = false)
     private Customer owner;
+
 
     // No argument constructor
     public Pet() {}
 
+
+
     public Pet(Long id,
                PetType type,
                String name,
-               long ownerId,
+               Long ownerId,
                LocalDate birthDate,
                String notes,
                List<Employee> employees,
@@ -49,7 +53,7 @@ public class Pet {
         this.id = id;
         this.type = type;
         this.name = name;
-        this.ownerId = ownerId;
+        this.ownerId =ownerId;
         this.birthDate = birthDate;
         this.notes = notes;
         this.employees = employees;
@@ -83,13 +87,14 @@ public class Pet {
         this.name = name;
     }
 
-    public long getOwnerId() {
+    public Long getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(long ownerId) {
+    public void setOwnerId(Long ownerId) {
         this.ownerId = ownerId;
     }
+
 
     public LocalDate getBirthDate() {
         return birthDate;

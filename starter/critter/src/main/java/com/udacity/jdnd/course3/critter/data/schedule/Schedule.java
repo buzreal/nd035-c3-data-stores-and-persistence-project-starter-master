@@ -1,6 +1,7 @@
 package com.udacity.jdnd.course3.critter.data.schedule;
 
 import com.udacity.jdnd.course3.critter.data.pet.Pet;
+import com.udacity.jdnd.course3.critter.data.user.Customer;
 import com.udacity.jdnd.course3.critter.data.user.Employee;
 import com.udacity.jdnd.course3.critter.data.user.EmployeeSkill;
 
@@ -23,8 +24,12 @@ public class Schedule {
     @ElementCollection
     private Set<EmployeeSkill> activities;
 
+
     @ManyToMany
     private List<Pet> pets;
+
+    @ManyToOne
+    private Customer customer;
 
     public Employee getEmployee() {
         return employee;
@@ -35,6 +40,7 @@ public class Schedule {
     }
 
     @ManyToOne
+    @JoinColumn(name = "employee_id")
     private Employee employee;
 
 

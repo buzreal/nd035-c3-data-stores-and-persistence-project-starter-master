@@ -3,6 +3,7 @@ package com.udacity.jdnd.course3.critter.data.user;
 import com.udacity.jdnd.course3.critter.data.pet.Pet;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,7 +18,8 @@ public class Customer {
     @ElementCollection
     private List<Long> petIds;
     @OneToMany(mappedBy = "owner")
-    private List<Pet> pets;
+    @ElementCollection
+    private List<Pet> pets = new ArrayList<>();
 
     public Customer(
                     Long id,
@@ -37,7 +39,9 @@ public class Customer {
     }
 
     // No argument constructor
-    public Customer(){}
+    public Customer(){
+        petIds = new ArrayList<>();
+    }
 
 
     public Long getId() {

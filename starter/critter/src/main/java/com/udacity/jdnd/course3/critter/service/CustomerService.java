@@ -1,11 +1,14 @@
 package com.udacity.jdnd.course3.critter.service;
 
+import com.udacity.jdnd.course3.critter.data.pet.PetRepository;
 import com.udacity.jdnd.course3.critter.data.user.Customer;
 import com.udacity.jdnd.course3.critter.data.user.CustomerDTO;
 import com.udacity.jdnd.course3.critter.data.user.CustomerRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,54 +17,34 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public CustomerService(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
+
+    @Autowired
+    private PetRepository petRepository;
+
+
+public CustomerDTO getOwnerByPet(Long petId) throws NotFoundException {
+    Customer customer = customerRepository.findOwnerByPetIdsContains(petId);
+
+    if (customer == null) {
+        throw new NotFoundException("Owner not found for pet with ID: " + petId);
     }
 
-//    public CustomerDTO getCustomerById(Long customerId) {
-//        Customer customer = customerRepository.findById(customerId);
-//
-//        // Convert Customer to CustomerDTO
-//        CustomerDTO customerDTO = new CustomerDTO();
-//        customerDTO.setId(customer.getId());
-//        customerDTO.setName(customer.getName());
-//        customerDTO.setPhoneNumber(customer.getPhoneNumber());
-//        customerDTO.setNotes(customer.getNotes());
-//
-//        return customerDTO;
-//    }
+    return convertToDTO(customer);
+}
 
-    // Other service methods
-
-    // Example method to create a customer
-    public Long createCustomer(CustomerDTO customerDTO) {
-        // Convert CustomerDTO to Customer
-        Customer customer = new Customer();
-        customer.setName(customerDTO.getName());
-        customer.setPhoneNumber(customerDTO.getPhoneNumber());
-        customer.setNotes(customerDTO.getNotes());
-        customer.setPetIds(customerDTO.getPetIds());
-
-        // Save the customer in the repository
-        Customer savedCustomer = customerRepository.save(customer);
-
-        return savedCustomer.getId();
-    }
-
-//    public List<Customer> getAllCustomers() {
-//        return customerRepository.findAll();
-//    }
-//
     public Customer getCustomerById(Long id) throws NotFoundException {
         return customerRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Pet owner not found"));
     }
+    public CustomerDTO getCustomerByOwnerId(Long id) {
+        Customer customer = customerRepository.findCustomerByOwnerId(id);
+        if (customer == null) {
+            throw new EntityNotFoundException("Customer not found");
+        }
 
-//
-//    public Customer createCustomer(Customer customer) {
-//        return customerRepository.save(customer);
-//    }
-//
+        // Convert the Customer entity to CustomerDTO
+        return convertToCustomerDTO(customer);
+    }
 
     public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
         // Map CustomerDTO to Customer entity
@@ -110,6 +93,17 @@ public class CustomerService {
         customerDTO.setNotes(customer.getNotes());
         customerDTO.setPetIds(customer.getPetIds());
         // Map other fields as needed
+        return customerDTO;
+    }
+
+    // Conversion method to convert Customer entity to CustomerDTO
+    private CustomerDTO convertToCustomerDTO(Customer customer) {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setId(customer.getId());
+        customerDTO.setName(customer.getName());
+        customerDTO.setPhoneNumber(customer.getPhoneNumber());
+        customerDTO.setNotes(customer.getNotes());
+        customerDTO.setPetIds(customer.getPetIds());
         return customerDTO;
     }
 

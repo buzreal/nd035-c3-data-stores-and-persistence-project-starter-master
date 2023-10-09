@@ -9,7 +9,7 @@ import java.util.Set;
  */
 public class EmployeeDTO {
 
-    private long id;
+    private Long id;
     private String name;
     private Set<EmployeeSkill> skills;
     private Set<DayOfWeek> daysAvailable;
@@ -17,7 +17,7 @@ public class EmployeeDTO {
 
 
     // Getters & Setters
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

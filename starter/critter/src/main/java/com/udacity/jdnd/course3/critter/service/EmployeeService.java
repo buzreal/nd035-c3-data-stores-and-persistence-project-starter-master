@@ -1,14 +1,12 @@
 package com.udacity.jdnd.course3.critter.service;
 
-import com.udacity.jdnd.course3.critter.data.user.Employee;
-import com.udacity.jdnd.course3.critter.data.user.EmployeeDTO;
-import com.udacity.jdnd.course3.critter.data.user.EmployeeRepository;
-import com.udacity.jdnd.course3.critter.data.user.EmployeeRequestDTO;
+import com.udacity.jdnd.course3.critter.data.user.*;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,16 +37,6 @@ public class EmployeeService {
         employeeRepository.deleteById(id);
     }
 
-//    public Employee setAvailability(Long id, Set<DayOfWeek> daysAvailable) throws NotFoundException {
-//        Employee employee = getEmployeeById(id);
-//        employee.setDaysAvailable(daysAvailable);
-//        return employeeRepository.save(employee);
-//    }
-//
-//    public List<Employee> findEmployeeForService(DayOfWeek dayOfWeek) {
-//        return employeeRepository.findAllByAvailabilityContains(dayOfWeek);
-//    }
-
     public EmployeeDTO setAvailability(Long employeeId, Set<DayOfWeek> daysAvailable) throws NotFoundException {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new NotFoundException("Employee not found"));
@@ -57,15 +45,28 @@ public class EmployeeService {
         return mapEmployeeToDTO(employee);
     }
 
-    public List<EmployeeDTO> findEmployeeForService(EmployeeRequestDTO dayOfWeek) {
-        List<Employee> employees = employeeRepository.findAll();
-        List<Employee> availableEmployees = employees.stream()
-                .filter(employee -> employee.getDaysAvailable().contains(dayOfWeek))
-                .collect(Collectors.toList());
-        return availableEmployees.stream()
-                .map(this::mapEmployeeToDTO)
-                .collect(Collectors.toList());
+    public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
+        // Convert the request DTO to an Employee entity
+        Employee employee = EmployeeMapper.convertToEntity(employeeDTO);
+
+        // Save the employee in the database
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        // Convert the saved Employee entity to a DTO
+        return EmployeeMapper.convertToDTO(savedEmployee);
     }
+
+public List<EmployeeDTO> findEmployeesForService(EmployeeRequestDTO requestDTO) {
+    LocalDate date = requestDTO.getDate();
+    Set<EmployeeSkill> skills = requestDTO.getSkills();
+
+    return employeeRepository.findAll()
+            .stream()
+            .filter(employee -> employee.getDaysAvailable().contains(date.getDayOfWeek()))
+            .filter(employee -> employee.getSkills().containsAll(skills))
+            .map(this::mapEmployeeToDTO)
+            .collect(Collectors.toList());
+}
 
     private EmployeeDTO mapEmployeeToDTO(Employee employee) {
         EmployeeDTO dto = new EmployeeDTO();
@@ -74,13 +75,5 @@ public class EmployeeService {
         dto.setSkills(employee.getSkills());
         dto.setDaysAvailable(employee.getDaysAvailable());
         return dto;
-    }
-
-    private Employee mapDTOToEmployee(EmployeeDTO dto) {
-        Employee employee = new Employee();
-        employee.setName(dto.getName());
-        employee.setSkills(dto.getSkills());
-        employee.setDaysAvailable(dto.getDaysAvailable());
-        return employee;
     }
 }
